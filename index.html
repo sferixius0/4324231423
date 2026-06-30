@@ -1,0 +1,32 @@
+<div class="menu-item"><div class="item-main"><span class="item-name">МАТЧА</span><span class="item-price">8.00</span></div><div class="item-sizes">350 мл</div></div>
+            <div class="menu-item"><div class="item-main"><span class="item-name">МОРОЖЕНОЕ</span><span class="item-price">4.00</span></div><div class="item-sizes">100 гр</div></div>
+            
+            <h3 style="margin: 25px 0 15px 5px; font-size: 16px; letter-spacing: 1px; color: var(--text-muted);">ДОБАВИТЬ В НАПИТОК:</h3>
+            <div class="menu-item"><div class="item-main"><span class="item-name">АЛЬТЕРНАТИВНОЕ МОЛОКО</span><span class="item-price">3.00</span></div></div>
+            <div class="menu-item"><div class="item-main"><span class="item-name">СИРОП</span><span class="item-price">0.50</span></div></div>
+            <div class="menu-item"><div class="item-main"><span class="item-name">СГУЩЕНКА</span><span class="item-price">0.50</span></div></div>
+            <div class="menu-item"><div class="item-main"><span class="item-name">СЫРНАЯ ШАПОЧКА</span><span class="item-price">1.00</span></div></div>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <a href="https://instagram.com/lunacoffee.polotsk" target="_blank" class="btn-instagram">Наш Instagram</a>
+    </footer>
+
+    <script>
+        function openCategory(categoryName) {
+            let categories = document.getElementsByClassName("menu-category");
+            for (let i = 0; i < categories.length; i++) {
+                categories[i].classList.remove("active-category");
+            }
+            let buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+            document.getElementById(categoryName).classList.add("active-category");
+            event.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
