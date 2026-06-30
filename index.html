@@ -248,9 +248,6 @@
         .item-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
         .item-desc { font-size: 12px; color: var(--text-muted); margin-top: 8px; line-height: 1.5; }
 
-        .lemonade-grid-header { color: var(--text-muted); font-size: 11px; font-weight: 600; margin: 12px 0 6px; text-transform: uppercase; }
-        .lemonade-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; color: #cbd5e1; }
-
         /* --- МОДАЛЬНОЕ ОКНО КОНСТРУКТОРА --- */
         .modal-overlay {
             position: fixed;
@@ -378,15 +375,15 @@
         <div class="gallery-container">
             <div class="gallery-track">
                 <div class="gallery-slide">
-                    <img src="1722.jpg" alt="Интерьер кофейни Luna">
+                    <img src="images/1722.jpg" alt="Интерьер кофейни Luna">
                     <div class="gallery-caption">Наш уютный зал ожидания</div>
                 </div>
                 <div class="gallery-slide">
-                    <img src="1725.png" alt="Свежие десерты">
+                    <img src="images/1725.png" alt="Свежие десерты">
                     <div class="gallery-caption">Фирменная кондитерская витрина</div>
                 </div>
                 <div class="gallery-slide">
-                    <img src="1728.jpg" alt="Процесс приготовления">
+                    <img src="images/1728.jpg" alt="Процесс приготовления">
                     <div class="gallery-caption">Эстетика в каждой детали</div>
                 </div>
             </div>
@@ -416,7 +413,7 @@
 
     <div id="screen-menu" class="app-screen">
         <header class="menu-header">
-            <h2 style="text-transform: uppercase; font-spacing: 2px; font-size: 20px;">Наше меню</h2>
+            <h2 style="text-transform: uppercase; letter-spacing: 2px; font-size: 20px;">Наше меню</h2>
         </header>
 
         <div class="search-container">
@@ -712,7 +709,6 @@
         let cart = [];
         let currentItem = { name: '', basePrices: [], sizes: [], selectedSizeIndex: 0, activeMods: [] };
 
-        // Переключение экранов из нижнего меню
         function navigateTo(screenId) {
             const screens = document.querySelectorAll('.app-screen');
             screens.forEach(screen => screen.classList.remove('active-screen'));
@@ -721,13 +717,12 @@
             const navItems = document.querySelectorAll('.nav-item');
             navItems.forEach(item => item.classList.remove('active-nav'));
             
-            if(screenId === 'screen-home') document.getElementById('btn-nav-home').classList.add('active-nav');
+            if(screenId === 'screen-home') document.getElementById('btn-nav-home').add ? document.getElementById('btn-nav-home').classList.add('active-nav') : document.getElementById('btn-nav-home').classList.add('active-nav');
             if(screenId === 'screen-menu') document.getElementById('btn-nav-menu').classList.add('active-nav');
             
             window.scrollTo(0,0);
         }
 
-        // Клик по корзине в нижнем навибаре
         function openCartFromNav() {
             if(cart.length === 0) {
                 alert("Ваша корзина пуста! Выберите позиции в меню.");
@@ -737,7 +732,6 @@
             }
         }
 
-        // Переключение категорий меню (Горизонтальный скролл)
         function switchTab(event, sectionId) {
             const sections = document.getElementsByClassName("menu-section");
             for (let i = 0; i < sections.length; i++) sections[i].classList.remove("active-section");
@@ -749,7 +743,6 @@
             event.currentTarget.classList.add("active-tab");
         }
 
-        // Интеллектуальный поиск по меню
         function filterMenu() {
             const query = document.getElementById("menuSearch").value.toLowerCase();
             const cards = document.getElementsByClassName("item-card");
@@ -766,7 +759,6 @@
             }
         }
 
-        // Открытие конструктора опций товара
         function openConfig(name, prices, sizes, allowMods) {
             currentItem = { name: name, basePrices: prices, sizes: sizes, selectedSizeIndex: 0, activeMods: [] };
             document.getElementById("modalProductTitle").innerText = name;
@@ -797,7 +789,6 @@
             else currentItem.activeMods = currentItem.activeMods.filter(m => m.name !== name);
         }
 
-        // Добавление собранного товара в массив корзины
         function addItemToCart() {
             const finalPrice = currentItem.basePrices[currentItem.selectedSizeIndex] + currentItem.activeMods.reduce((acc, m) => acc + m.price, 0);
             const sizeLabel = currentItem.sizes[currentItem.selectedSizeIndex];
@@ -813,7 +804,6 @@
             closeConfig(null);
         }
 
-        // Рендеринг и подсчет плавающего виджета корзины
         function updateCartBar() {
             const bar = document.getElementById("cartBar");
             if(cart.length === 0) { bar.style.display = "none"; return; }
@@ -822,7 +812,6 @@
             document.getElementById("cartBarTotal").innerText = `${cart.reduce((acc, item) => acc + (item.price * item.qty), 0).toFixed(2)} BYN`;
         }
 
-        // Открытие детализированного окна корзины
         function openCart() {
             const container = document.getElementById("cartItemsContainer");
             container.innerHTML = "";
@@ -844,3 +833,26 @@
                         <button class="qty-btn" onclick="changeQty('${item.id}', -1)">-</button>
                         <span>${item.qty}</span>
                         <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+                    </div>`;
+                container.appendChild(row);
+            });
+
+            document.getElementById("cartFinalTotal").innerText = `${totalSum.toFixed(2)} BYN`;
+            document.getElementById("cartModal").style.display = "flex";
+        }
+
+        function closeCart(e) { if(!e || e.target === document.getElementById("cartModal") || e === null) document.getElementById("cartModal").style.display = "none"; }
+
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if(item) {
+                item.qty += delta;
+                if(item.qty <= 0) cart = cart.filter(i => i.id !== id);
+            }
+            updateCartBar();
+            if(cart.length === 0) closeCart(null);
+            else openCart();
+        }
+    </script>
+</body>
+</html>
